@@ -3,6 +3,7 @@ use rig::{
 };
 use tauri::Emitter;
 use serde::Serialize;
+use log::{error, info};
 
 mod tool;
 
@@ -48,6 +49,27 @@ async fn chat_with_agent(message: String, app_handle: tauri::AppHandle) -> Resul
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
+    android_logger::init_once(
+    android_logger::Config::default()
+            .with_max_level(log::LevelFilter::Debug)
+            .with_tag("AgentConversation")
+    );
+
+    // Load environment variables from embedded .env content
+    const ENV_CONTENT: &str = include_str!("../.env");
+    info!("Loading embedded .env content");
+    
+    for line in ENV_CONTENT.lines() {
+        if let Some((key, value)) = line.split_once('=') {
+            let key = key.trim();
+            let value = value.trim().trim_matches('"');
+            if !key.is_empty() && !value.is_empty() {
+                std::env::set_var(key, value);
+                info!("Set env var: {}", key);
+            }
+        }
+    }
+
     tauri::Builder::default()
         .plugin(tauri_plugin_opener::init())
         .invoke_handler(tauri::generate_handler![chat_with_agent])
