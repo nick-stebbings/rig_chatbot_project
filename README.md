@@ -1,4 +1,4 @@
-# Rust AI Chatbot Tutorial: Part 1
+# Rust AI Chatbot Tutorial: Parts 1 & 2
 
 Welcome to the repository for Part 1 of my YouTube tutorial series on building a simple AI chatbot using Rust, Rig, and Tauri for Android.
 
@@ -13,6 +13,16 @@ In this initial part of the tutorial, we cover the following:
 * **Creating a custom tool** for our AI agent to get the current time.
 * **Sending a prompt** to the agent and receiving a response.
 * **Basic project structure** and dependencies using Cargo.
+
+## Part 2: Tauri Mobile Setup
+
+In this second part of the tutorial, we integrate the code from part 1 into a working Android app with UI.
+
+* **Setting up a new Tauri project.**
+* **Generating a UI** to connect to the agent in the backend.
+* **Wiring up the UI with event listeners** so that we can parse and render the stream of data from the agent.
+* **Sending events to/from the backend** so that our chatbot UI is fully integrated with the agent.
+* **Basic logging and passing environment variables** to debug pass through our API key.
 
 ## Getting Started
 
@@ -45,10 +55,16 @@ To get this project running on your local machine, follow these steps:
     ```
     Remember to replace `your-api-key-goes-here` with your actual OpenAI API key.
 
-3.  **Run the project:**
+3a.  **Run the project:**
     ```sh
     cargo run
     ```
+
+3b.  **Run the project (Android version):**
+    ```sh
+    cargo tauri android dev
+    ```
+** Make sure to first set all environment variables and install all dependencies as mentioned in the video and the Tauri docs**
 
 You should see the chatbot's response printed to the console.
 
@@ -62,9 +78,8 @@ Here's a quick look at the key files in this project:
 
 ## What's Next?
 
-This is just the beginning! In the next parts of this series, we will:
+This is just the beginning! In the next part of this series, we will:
 
-* **Part 2:** Integrate this chatbot into a **Tauri application**, create a user interface, and run it on Android.
 * **Part 3:** Implement more advanced **tool use with a simple MCP server**, allowing our chatbot to perform more complex tasks.
 
 Stay tuned for the next videos in the series!
