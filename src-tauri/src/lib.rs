@@ -1,11 +1,19 @@
 use rig::{
-    client::{completion::CompletionClientDyn, ProviderClient}, completion::Prompt, providers::{self, openai}
+    client::{completion::CompletionClientDyn, ProviderClient}, completion::Prompt, providers::{self, openai},
 };
+use tauri::Emitter;
+use serde::Serialize;
 
 mod tool;
 
+#[derive(Clone, Serialize)]
+struct AgentChunk {
+    delta: Option<String>,
+    tool_calls: Option<serde_json::Value>,
+}
+
 #[tauri::command]
-async fn chat_with_agent(message: String) -> Result<String, ()> {
+async fn chat_with_agent(message: String, app_handle: tauri::AppHandle) -> Result<(), ()> {
     let openai_client = openai::Client::from_env();
 
     let agent = openai_client
@@ -15,10 +23,23 @@ async fn chat_with_agent(message: String) -> Result<String, ()> {
             .build();
 
     let result = match agent.prompt(&message).await {
-        Ok(response) => response,
+        Ok(response) => {
+            let agent_chunk = AgentChunk {
+                delta: Some(response),
+                tool_calls: None,
+            };
+            app_handle.emit("agent-chunk", agent_chunk).unwrap();
+        },
         Err(e) => {
-            eprintln!("Error during chat: {}", e);
-            return Err(());
+            error!("Agent chat error: {:?}", e);
+            let error_chunk = AgentChunk {
+                delta: Some(format!("Error: {}", e)),
+                tool_calls: None,
+            };
+            
+            if let Err(emit_err) = app_handle.emit("agent-chunk", error_chunk) {
+                error!("Failed to emit error chunk: {:?}", emit_err);
+            }
         }
     }; 
 

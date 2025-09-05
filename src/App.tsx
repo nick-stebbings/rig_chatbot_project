@@ -129,11 +129,11 @@ function App() {
 
   return (
     <main class="container">
-      <div class="bg-gray-50 h-screen flex flex-col overflow-hidden mb-12 pt-12">
+      <div class="bg-gray-50 text-black h-screen flex flex-col overflow-hidden mb-12 pt-16">
         {/* Header */}
         <header class="bg-white border-b border-gray-200 px-4 py-3 flex items-center justify-between shadow-sm">
           <div class="flex items-center space-x-3">
-            <button class="p-2 hover:bg-gray-100 rounded-lg transition-colors">
+            <button class="p-2 bg-white hover:bg-gray-100 rounded-lg transition-colors">
               <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
               </svg>
